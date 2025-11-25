@@ -71,7 +71,7 @@ async function sendFingerprint() {
         .then(j => j.ip)
         .catch(() => null);
 
-    await fetch("https://mylocal.quailtv.org/api/fingerprint/store", {
+    await fetch("https://device.quailtv.org/api/fingerprint/store", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
