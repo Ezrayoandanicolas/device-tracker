@@ -129,5 +129,7 @@
                 </div>
             </div>
         </div>
+        <script src="/fingerprint.js"></script>
+
     </body>
 </html>
