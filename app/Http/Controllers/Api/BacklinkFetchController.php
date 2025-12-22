@@ -44,11 +44,11 @@ class BacklinkFetchController extends Controller
         \Log::channel('stack')->info('RAW REQUEST', $request->all());
 
         try {
-            $request->validate([
-                'article_slug'   => 'required|string',
-                'article_domain' => 'required|string',
-                'limit'          => 'required|integer|min:1|max:5',
-            ]);
+            // $request->validate([
+            //     'article_slug'   => 'required|string',
+            //     'article_domain' => 'required|string',
+            //     'limit'          => 'required|integer|min:1|max:5',
+            // ]);
         } catch (\Throwable $e) {
             \Log::channel('stack')->error('VALIDATION FAILED', [
                 'error' => $e->getMessage(),
@@ -118,16 +118,11 @@ class BacklinkFetchController extends Controller
                     'domain' => $domain,
                 ]);
 
-                BacklinkArticle::firstOrCreate(
-                    [
-                        'url_backlink_id' => $b->id,
-                        'article_slug'    => $slug,
-                        'article_domain'  => $domain,
-                    ],
-                    [
-                        'views' => 0,
-                    ]
-                );
+                BacklinkArticle::create([
+                    'url_backlink_id' => $b->id,
+                    'article_slug'    => $slug,
+                    'article_domain'  => $domain,
+                ]);
             }
 
             // 4️⃣ final fetch
