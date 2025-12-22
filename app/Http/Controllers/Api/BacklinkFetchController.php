@@ -118,11 +118,16 @@ class BacklinkFetchController extends Controller
                     'domain' => $domain,
                 ]);
 
-                BacklinkArticle::create([
-                    'url_backlink_id' => $b->id,
-                    'article_slug'    => $slug,
-                    'article_domain'  => $domain,
-                ]);
+                BacklinkArticle::firstOrCreate(
+                    [
+                        'url_backlink_id' => $b->id,
+                        'article_slug'    => $slug,
+                        'article_domain'  => $domain,
+                    ],
+                    [
+                        'views' => 0,
+                    ]
+                );
             }
 
             // 4️⃣ final fetch
