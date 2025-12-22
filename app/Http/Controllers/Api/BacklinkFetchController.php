@@ -40,8 +40,8 @@ class BacklinkFetchController extends Controller
     public function claim(Request $request)
     {
         // dd('CLAIM METHOD HIT');
-        \Log::info('=== BACKLINK CLAIM HIT ===');
         return $request->all();
+        \Log::info('=== BACKLINK CLAIM HIT ===');
         \Log::info('RAW REQUEST', $request->all());
         
         try {
