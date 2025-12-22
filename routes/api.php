@@ -36,8 +36,8 @@ Route::post('/fetch/backlink/posts', [BacklinkFetchController::class, 'fetch']);
 Route::post('/backlink/claim', [BacklinkFetchController::class, 'claim']);
 Route::get('/backlink/get', [BacklinkFetchController::class, 'get']);
 
-Route::get('/url-backlinks', [BacklinkFetchController::class, 'index']);
-Route::post('/url-backlinks', [BacklinkFetchController::class, 'store']);
-Route::put('/url-backlinks/{id}', [BacklinkFetchController::class, 'update']);
-Route::get('/url-backlinks/usage-count', [BacklinkFetchController::class, 'usageCount']);
-Route::get('/url-backlinks/{id}/usage-count', [BacklinkFetchController::class, 'usageCountById']);
+Route::get('/url-backlinks', [BacklinkFetchController::class, 'index'])->withoutMiddleware(['auth:sanctum', 'auth']);
+Route::post('/url-backlinks', [BacklinkFetchController::class, 'store'])->withoutMiddleware(['auth:sanctum', 'auth']);
+Route::put('/url-backlinks/{id}', [BacklinkFetchController::class, 'update'])->withoutMiddleware(['auth:sanctum', 'auth']);
+Route::get('/url-backlinks/usage-count', [BacklinkFetchController::class, 'usageCount'])->withoutMiddleware(['auth:sanctum', 'auth']);
+Route::get('/url-backlinks/{id}/usage-count', [BacklinkFetchController::class, 'usageCountById'])->withoutMiddleware(['auth:sanctum', 'auth']);
