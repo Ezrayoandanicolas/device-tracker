@@ -41,9 +41,9 @@ class BacklinkFetchController extends Controller
     {
         // dd('CLAIM METHOD HIT');
         \Log::info('=== BACKLINK CLAIM HIT ===');
+        return $request->all();
         \Log::info('RAW REQUEST', $request->all());
         
-        return 'claim ok';
         try {
             $request->validate([
                 'article_slug'   => 'required|string',
