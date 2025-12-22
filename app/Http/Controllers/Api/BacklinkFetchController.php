@@ -40,11 +40,11 @@ class BacklinkFetchController extends Controller
     public function claim(Request $request)
     {
         // dd('CLAIM METHOD HIT');
-        return 'claim ok';
         \Log::channel('stack')->info('=== BACKLINK CLAIM HIT ===');
         \Log::channel('stack')->info('RAW REQUEST', $request->all());
-
+        
         try {
+            return 'claim ok';
             $request->validate([
                 'article_slug'   => 'required|string',
                 'article_domain' => 'required|string',
