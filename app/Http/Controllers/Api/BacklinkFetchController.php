@@ -43,8 +43,8 @@ class BacklinkFetchController extends Controller
         \Log::info('=== BACKLINK CLAIM HIT ===');
         \Log::info('RAW REQUEST', $request->all());
         
+        return 'claim ok';
         try {
-            return 'claim ok';
             $request->validate([
                 'article_slug'   => 'required|string',
                 'article_domain' => 'required|string',
