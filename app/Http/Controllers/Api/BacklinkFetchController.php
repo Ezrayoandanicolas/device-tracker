@@ -40,10 +40,10 @@ class BacklinkFetchController extends Controller
     public function claim(Request $request)
     {
         // dd('CLAIM METHOD HIT');
-        return $request->all();
-        \Log::info('=== BACKLINK CLAIM HIT ===');
-        \Log::info('RAW REQUEST', $request->all());
-        
+        // return 'claim ok';
+        \Log::channel('stack')->info('=== BACKLINK CLAIM HIT ===');
+        \Log::channel('stack')->info('RAW REQUEST', $request->all());
+
         try {
             $request->validate([
                 'article_slug'   => 'required|string',
@@ -51,7 +51,7 @@ class BacklinkFetchController extends Controller
                 'limit'          => 'required|integer|min:1|max:5',
             ]);
         } catch (\Throwable $e) {
-            \Log::error('VALIDATION FAILED', [
+            \Log::channel('stack')->error('VALIDATION FAILED', [
                 'error' => $e->getMessage(),
             ]);
             throw $e;
@@ -61,7 +61,7 @@ class BacklinkFetchController extends Controller
         $domain = $this->normalizeDomain($request->article_domain);
         $limit  = (int) $request->limit;
 
-        \Log::info('NORMALIZED INPUT', [
+        \Log::channel('stack')->info('NORMALIZED INPUT', [
             'slug'   => $slug,
             'domain' => $domain,
             'limit'  => $limit,
@@ -69,7 +69,7 @@ class BacklinkFetchController extends Controller
 
         return DB::transaction(function () use ($slug, $domain, $limit) {
 
-            \Log::info('DB TRANSACTION START');
+            \Log::channel('stack')->info('DB TRANSACTION START');
 
             // 1️⃣ existing
             $existing = BacklinkArticle::with('backlink')
@@ -77,13 +77,13 @@ class BacklinkFetchController extends Controller
                 ->where('article_domain', $domain)
                 ->get();
 
-            \Log::info('EXISTING FOUND', [
+            \Log::channel('stack')->info('EXISTING FOUND', [
                 'count' => $existing->count(),
                 'rows'  => $existing->toArray(),
             ]);
 
             if ($existing->count() >= $limit) {
-                \Log::info('EXISTING >= LIMIT, RETURNING');
+                \Log::channel('stack')->info('EXISTING >= LIMIT, RETURNING');
 
                 return response()->json([
                     'data' => $existing->map(fn ($i) => [
@@ -96,7 +96,7 @@ class BacklinkFetchController extends Controller
 
             $needed = $limit - $existing->count();
 
-            \Log::info('NEEDED BACKLINK', [
+            \Log::channel('stack')->info('NEEDED BACKLINK', [
                 'needed' => $needed,
             ]);
 
@@ -106,14 +106,14 @@ class BacklinkFetchController extends Controller
                 ->limit($needed)
                 ->get();
 
-            \Log::info('AVAILABLE BACKLINKS', [
+            \Log::channel('stack')->info('AVAILABLE BACKLINKS', [
                 'count' => $available->count(),
                 'rows'  => $available->toArray(),
             ]);
 
             // 3️⃣ insert
             foreach ($available as $b) {
-                \Log::info('INSERTING BACKLINK', [
+                \Log::channel('stack')->info('INSERTING BACKLINK', [
                     'url_backlink_id' => $b->id,
                     'slug' => $slug,
                     'domain' => $domain,
@@ -132,7 +132,7 @@ class BacklinkFetchController extends Controller
                 ->where('article_domain', $domain)
                 ->get();
 
-            \Log::info('FINAL RESULT', [
+            \Log::channel('stack')->info('FINAL RESULT', [
                 'count' => $final->count(),
                 'rows'  => $final->toArray(),
             ]);
